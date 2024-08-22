@@ -1,5 +1,5 @@
 import functions
-from derivatives import gradient
+from derivatives import gradient, hessian
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -36,6 +36,9 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.plot_surface(X,Y,F, cmap='viridis')
 
+# Evaluating rosenbrock's hessian at (1,1) (which we KNOW is a local minimum)
+x0 = np.array([1.,1.])
+hess = hessian(f,x0)
+print(f'\n∇2f({x0}) [hessian] is \n{hess}')
+
 plt.show()
-
-

@@ -32,3 +32,22 @@ def gradient(f, x0, method='centrada'):
             grad[i] = partial_centered(f, x0, i, h)
 
     return grad
+
+# Approximation of hessian evaluated at x0
+def hessian(f, x0):
+    h = 10 ** -5
+    n = len(x0)
+    hess = np.zeros((n,n))
+    ek = np.zeros(n)
+    ej = np.zeros(n)
+
+    for k in range(n):
+        for j in range(n):
+            ek[k] = 1
+            ej[j] = 1
+            hess[k,j] = f(x0 + h*ek + h*ej) - f(x0 + h*ek) - f(x0 + h*ej) + f(x0)
+            hess[k,j] = hess[k,j]/h**2
+            ek[k] = 0
+            ej[j] = 0
+
+    return hess
