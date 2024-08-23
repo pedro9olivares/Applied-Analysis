@@ -1,5 +1,4 @@
 import numpy as np
-import copy
 
 # Partial derivative of f with respect to x_i, evaluated on x0. 
 # This one uses "Diferencia finita hacia adelante"
@@ -42,12 +41,12 @@ def hessian(f, x0):
     ej = np.zeros(n)
 
     for k in range(n):
+        ek[k] = 1
         for j in range(n):
-            ek[k] = 1
             ej[j] = 1
             hess[k,j] = f(x0 + h*ek + h*ej) - f(x0 + h*ek) - f(x0 + h*ej) + f(x0)
-            hess[k,j] = hess[k,j]/h**2
-            ek[k] = 0
+            hess[k,j] = hess[k,j]/(h**2)
             ej[j] = 0
+        ek[k] = 0
 
     return hess

@@ -23,5 +23,13 @@ def fermat_weber(x):
 
     fx = np.sqrt(0) + np.sqrt(0) + np.sqrt(0)
 
+# Parabaloid with uneven curvature
+def uneven_paraboloid(x):
+    x1 = x[0]
+    x2 = x[1]
+
+    fx = x1**2 +100*x2**2
+    return fx
+
 
 

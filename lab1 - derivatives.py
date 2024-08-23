@@ -41,4 +41,4 @@ x0 = np.array([1.,1.])
 hess = hessian(f,x0)
 print(f'\n∇2f({x0}) [hessian] is \n{hess}')
 
-plt.show()
+#plt.show()
