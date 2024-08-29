@@ -28,7 +28,7 @@ def uneven_paraboloid(x):
     x1 = x[0]
     x2 = x[1]
 
-    fx = x1**2 +100*x2**2
+    fx = x1**2 +10*x2**2
     return fx
 
 
