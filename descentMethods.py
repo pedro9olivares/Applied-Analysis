@@ -26,7 +26,7 @@ def max_descent(f, xi, maxiter = 200):
     tol = 10 ** -5
     k = 0   # Iteration counter
     
-    c1 = 0.1
+    c1 = .1
 
     grad = gradient(f, xi)
     grad_norm = np.linalg.norm(grad)
@@ -35,17 +35,19 @@ def max_descent(f, xi, maxiter = 200):
         p = -grad
         a = 1
 
-        fx = f(xi)
+        x_i_unmodified = xi.copy()
+        g0 = f(x_i_unmodified)
         slope = c1*(grad.T@p)
 
         xi = xi + a*p
-        fxi = f(xi)
+        ga = f(xi)
+        
         ka_max = 10
         ka = 0
-        while fxi > fx + a*slope and ka < ka_max:
+        while ga > g0 + a*slope and ka < ka_max:
             a = a/2
-            xi = xi + a*p
-            fxi = f(xi)
+            xi = x_i_unmodified + a*p
+            ga = f(xi)
             ka += 1
             
         grad = gradient(f, xi)

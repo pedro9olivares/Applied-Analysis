@@ -37,16 +37,16 @@ def hessian(f, x0):
     h = 10 ** -5
     n = len(x0)
     hess = np.zeros((n,n))
-    ek = np.zeros(n)
-    ej = np.zeros(n)
 
     for k in range(n):
-        ek[k] = 1
         for j in range(n):
-            ej[j] = 1
-            hess[k,j] = f(x0 + h*ek + h*ej) - f(x0 + h*ek) - f(x0 + h*ej) + f(x0)
+            hess[k,j] = f(x0 + h*e(k,n) + h*e(j,n)) - f(x0 + h*e(k,n)) - f(x0 + h*e(j,n)) + f(x0)
             hess[k,j] = hess[k,j]/(h**2)
-            ej[j] = 0
-        ek[k] = 0
 
     return hess
+
+# Functions for getting the i-th standard basis vector of dimension n
+def e(i, n):
+    e_i = np.zeros(n)
+    e_i[i] = 1
+    return e_i
