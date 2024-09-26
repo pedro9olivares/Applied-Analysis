@@ -135,3 +135,18 @@ def newton_descent_unrestricted(f, xi, maxiter = 50):
         k += 1
 
     return xi, k
+
+    def doblez_rc(B,g,Delta):
+        p_cauchy = -((g.T@g)/(g.T@B@g))*g
+        p_newton = np.linalg.solve(B, -g)
+
+        norma_cauchy = np.linalg.norm(p_cauchy)
+        norma_newton = np.linalg.norm(p_newton)
+
+        if norma_cauchy <= delta:
+            ps = p_newton
+        else:
+            if norma_cauchy > delta:
+                ps = delta * p_cauchy/norma_cauchy
+            else:
+                pass                

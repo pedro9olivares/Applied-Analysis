@@ -60,7 +60,7 @@ def max_descent(f, xi, maxiter = 200):
 
 # Function that implements Newton's descent method
 # OJO: it is not always the case that the hessian is symmetric and positive definite
-# Observation: Newton metho converges quadratically (the error decreases quadratically)
+# Observation: Newton method converges quadratically (the error decreases quadratically)
 def newton_descent(f, xi, maxiter = 50):
     tol = 10 ** -5
     k = 0   # Iteration counter
