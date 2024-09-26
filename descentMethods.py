@@ -136,17 +136,68 @@ def newton_descent_unrestricted(f, xi, maxiter = 50):
 
     return xi, k
 
-    def doblez_rc(B,g,Delta):
-        p_cauchy = -((g.T@g)/(g.T@B@g))*g
-        p_newton = np.linalg.solve(B, -g)
+def get_positive_root(p_cauchy, p_newton, delta):
+    p_aux = p_newton - p_cauchy
+    A_coef=  np.dot(p_aux, p_aux)
+    B_coef = 2*np.dot(p_aux, p_cauchy)
+    C_coef = np.dot(p_cauchy, p_cauchy) - delta
 
-        norma_cauchy = np.linalg.norm(p_cauchy)
-        norma_newton = np.linalg.norm(p_newton)
+    Disc = B_coef**(2)-4*A_coef*C_coef
+    Disc = np.sqrt(Disc)
+    t_1 = (-B_coef-Disc)/(2*A_coef)
+    t_2 = (-B_coef+Disc)/(2*A_coef)
 
-        if norma_cauchy <= delta:
-            ps = p_newton
+    if t_1 > 0:
+        return t_1
+    elif t_2 > 0:
+        return t_2
+    else:
+        raise('Upsis')
+
+# Doblez para región de confianza
+def doblez_rc_(B,g,delta):
+    v = B*g
+    p_cauchy = -(np.dot(g,g)/np.dot(g,v))*g
+    p_newton = np.linalg.solve(B, -g)
+
+    norma_cauchy = np.linalg.norm(p_cauchy)
+    norma_newton = np.linalg.norm(p_newton)
+
+    if norma_newton <= delta:
+        ps = p_newton
+    else:
+        if norma_cauchy >= delta:
+            ps = delta * p_cauchy/norma_cauchy
         else:
-            if norma_cauchy > delta:
-                ps = delta * p_cauchy/norma_cauchy
-            else:
-                pass                
+            t = get_positive_root(p_cauchy, p_newton, delta)
+            ps = p_cauchy+ t*(p_newton - p_cauchy)
+            pass
+
+# Doblez para región de confianza
+def doblez_rc(B,g,delta):
+    v = B*g
+    p_cauchy = -(np.dot(g,g)/np.dot(g,v))*g
+    p_newton = np.linalg.solve(B, -g)
+
+    norma_cauchy = np.linalg.norm(p_cauchy)
+    norma_newton = np.linalg.norm(p_newton)
+
+    if norma_newton <= delta:
+        ps = p_newton
+        print('Dirección de Newton', end='\t')
+    else:
+        if norma_cauchy >= delta:
+            ps = delta * p_cauchy/norma_cauchy
+            print('Punto de Cauchy', end='\t')
+        else:
+            p_aux = p_newton - p_cauchy
+            A_coef=  np.dot(p_aux, p_aux)
+            B_coef = 2*np.dot(p_aux, p_cauchy)
+            C_coef = np.dot(p_cauchy, p_cauchy) - delta
+            t_sol = np.roots([A_coef, B_coef, C_coef])
+            ts = np.amax(t_sol)
+            ps = p_cauchy+ ts*p_aux
+            print('Dirección de Cauchy', end='\t')
+
+    return ps
+                  
