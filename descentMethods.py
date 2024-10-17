@@ -200,4 +200,15 @@ def doblez_rc(B,g,delta):
             print('Dirección de Cauchy', end='\t')
 
     return ps
-                  
+
+def regioncon(f, x, maxiter=200, 
+              tol=10**-4, delta_min = 10**-5, delta_max=10):
+    g = gradient(f, x)
+    k = 0
+
+    while np.linalg.norm(g) > tol and k < maxiter:
+        pk = 0
+
+        k += 1
+
+    return xf, k
