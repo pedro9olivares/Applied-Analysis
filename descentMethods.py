@@ -212,3 +212,57 @@ def regioncon(f, x, maxiter=200,
         k += 1
 
     return xf, k
+
+# (Gradiente conjugado funcionando)
+# Código del gradiente conjugado
+def mi_gc2(A, b):
+    tol = 10**-3
+    maxiterk = A.shape[1]
+
+    k = 0
+    x = np.zeros(A.shape[1])
+    r = A@x - b
+    p = -r
+
+    norma = np.linalg.norm(r)
+    while norma > tol and k < maxiterk:
+        alpha = (np.dot(-r,p))/((p.T@A)@p)
+        x = x + np.dot(alpha, p)
+        r = A@x - b
+        beta = ((r.T@A)@p)/((p.T@A)@p)
+        p = -r + np.dot(beta, p)
+        norma = np.linalg.norm(r)
+        k += 1
+
+    return x, k
+
+# Doblez modificado
+def doblez_rc_modificado(B,g,delta):
+    v = B*g
+    p_cauchy = -(np.dot(g,g)/np.dot(g,v))*g
+    p_newton = mi_gc2(B, -g)
+
+    norma_cauchy = np.linalg.norm(p_cauchy)
+    norma_newton = np.linalg.norm(p_newton)
+
+    if norma_newton <= delta:
+        ps = p_newton
+    else:
+        if norma_cauchy >= delta:
+            ps = delta * p_cauchy/norma_cauchy
+        else:
+            t = get_positive_root(p_cauchy, p_newton, delta)
+            ps = p_cauchy+ t*(p_newton - p_cauchy)
+            pass
+
+def regionconf_modificado(f, x, maxiter=200, 
+              tol=10**-4, delta_min = 10**-5, delta_max=10):
+    g = gradient(f, x)
+    k = 0
+
+    while np.linalg.norm(g) > tol and k < maxiter:
+        pk = 0
+
+        k += 1
+
+    return xf, k
