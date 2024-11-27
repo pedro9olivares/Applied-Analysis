@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 """## Paso 0: Generación de la malla y funciones de los bordes"""
 
 # Longitud de la placa de calor
-n = 10
+n = 50
 
 # Resolución de la malla
 r = 50
@@ -107,13 +107,21 @@ def llenaAb(A, b, i):
             pass
 
     return
-
-A = np.zeros((r**2, r**2))
+n = r**(2)
+A = 4*np.eye(n)
+# subdiagonal y supra diagonal
+for i in range (n-1):
+    A[i,i+1] = -1.0
+    A[i+1,i] = -1.0
+# subdiagonales en banda
+for i in range(n-r):
+    A[i+r, i] = -1.0
+    A[i, i+r]= -1.0
 
 b = np.zeros(r**2)
 
-for i in range(r**2):
-    llenaAb(A, b, i)
+#for i in range(r**2):
+#    llenaAb(A, b, i)
 
 print('La matriz A:')
 print(A)
@@ -190,7 +198,7 @@ x = eje_x + eje_y
 # Visualizamos en 3D
 fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(eje_x, eje_y, calor_con_bordes, color='blue', marker='o')
+ax.plot_surface(eje_x, eje_y, calor_con_bordes) 
 
 ax.set_xlabel("X")
 ax.set_ylabel("Y")
